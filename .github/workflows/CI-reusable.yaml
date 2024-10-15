@@ -22,12 +22,12 @@ jobs:
         uses: actions/checkout@v4.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN}}
-          path: service-code
       
       - name: Terraform Validate
-        working-directory: service-code/terraform
+        working-directory: terraform
         id: Validate
         run: |
+          ls
           terraform init -backend=false
           terrafrom validate
       

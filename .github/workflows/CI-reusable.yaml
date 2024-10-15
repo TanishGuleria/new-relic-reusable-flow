@@ -1,0 +1,54 @@
+name: CI Terraform ReUsable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      dummy_input:
+        description: "keeping this for later" 
+        required: true
+        type: 'string'
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+
+jobs:
+  
+  Build:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+      - name: Checkout Service Code
+        uses: actions/checkout@v4.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN}}
+      
+      - name: Terraform Validate
+        id: Validate
+        run: |
+          terraform init -backend=false
+          terrafrom validate
+      
+      - name: Run Trivy or any scan vulnerability scanner in IaC mode
+        if: ${{ steps.terraform-validate.outcome == 'success' }}
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: 'config'
+          hide-progress: ${{ inputs.hide-progress }}
+          scan-ref: '.'
+          skip-dirs: ${{ inputs.skip-dirs }}
+          limit-severities-for-sarif: true
+          exit-code: ${{ inputs.exit-code }}
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+      
+      - name: Post CI
+        run: | 
+          echo "CI Completed"
+       
+
+
+      

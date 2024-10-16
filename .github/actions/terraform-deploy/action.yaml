@@ -8,6 +8,9 @@ inputs:
     description: 'Branch to deploy the Service Terraform code from'
     required: true
     type: string
+secrets:
+  PAT_TOKEN:
+    required: true
 
 
 runs:

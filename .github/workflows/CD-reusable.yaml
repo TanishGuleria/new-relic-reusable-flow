@@ -37,10 +37,12 @@ jobs:
         with:
           repository: TanishGuleria/new-relic-reusable-flow
           path: reusable-workflows
-          token: ${{ steps.create_token.outputs.token }}
+          token: ${{ secrets.PAT_TOKEN }}
       
       - name: Run Terrafrom CD
         uses: ./reusable-workflows/.github/actions/terraform-deploy
+        secrets:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           popAccount: ${{inputs.branch }}

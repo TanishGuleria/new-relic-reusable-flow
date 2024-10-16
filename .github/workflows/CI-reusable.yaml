@@ -27,7 +27,6 @@ jobs:
         working-directory: terraform
         id: terraform-validate
         run: |
-          ls
           terraform init -backend=false
           terraform validate
       

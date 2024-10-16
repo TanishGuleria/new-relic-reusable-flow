@@ -24,7 +24,7 @@ runs:
         terraform init -backend=true 
           #-backend-config="bucket=my-bucket" \
           #-backend-config="key=my-key" \
-          3-backend-config="region=my-region" \
+          #-backend-config="region=my-region" \
           #-backend-config="dynamodb_table=terraform-locks" \
           #-backend-config="encrypt=true"
         

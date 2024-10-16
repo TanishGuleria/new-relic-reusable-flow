@@ -109,5 +109,5 @@ jobs:
           echo "Deploying to targeted ${{ inputs.environment }} environment"
           # Add your deployment script/commands here
         env:
-          ENVIRONMENT: inputs.environment
+          ENVIRONMENT: ${{ inputs.environment }}
 

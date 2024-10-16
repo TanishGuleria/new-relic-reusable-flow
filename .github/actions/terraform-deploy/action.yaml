@@ -21,7 +21,8 @@ runs:
       id: terraform-init-validate
       run: |
         
-        terraform init -backend=true 
+        terraform init -backend=false
+          #-backend=true
           #-backend-config="bucket=my-bucket" \
           #-backend-config="key=my-key" \
           #-backend-config="region=my-region" \
@@ -32,5 +33,5 @@ runs:
         terraform validate
 
         # Generate a plan
-        terraform plan -out=plan.tfplan
+        terraform plan -out=plan.tfplan -lock=false
       shell: bash

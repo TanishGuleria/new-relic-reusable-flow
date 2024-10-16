@@ -36,11 +36,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: TanishGuleria/new-relic-reusable-flow
-          path: reusable-workflows
+          #path: reusable-workflows
           token: ${{ secrets.PAT_TOKEN }}
       
       - name: Run Terrafrom CD
-        uses: ./reusable-workflows/.github/actions/terraform-deploy
+        uses: ./.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           popAccount: ${{inputs.branch }}

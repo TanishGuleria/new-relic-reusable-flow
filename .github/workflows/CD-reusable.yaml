@@ -41,8 +41,6 @@ jobs:
       
       - name: Run Terrafrom CD
         uses: ./reusable-workflows/.github/actions/terraform-deploy
-        secrets:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           popAccount: ${{inputs.branch }}

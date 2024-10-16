@@ -8,14 +8,10 @@ inputs:
     description: 'Branch to deploy the Service Terraform code from'
     required: true
     type: string
-secrets:
-  PAT_TOKEN:
-    required: true
-
 
 runs:
   using: 'composite'
   steps:
     - name: Deploy to dev
       run: |
-        echo "Deploying to dev environment"
+        echo "Deploying to dev environment inside actions"

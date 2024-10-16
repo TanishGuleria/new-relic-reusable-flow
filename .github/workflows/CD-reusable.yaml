@@ -1,6 +1,6 @@
 name: CD Terraform ReUsable Workflow
 on:
-  workflow_dispatch:
+  workflow_call::
     inputs:
       environment:
         description: 'Environment to deploy the team-onboarding to'

@@ -23,4 +23,5 @@ runs:
         ls
         terraform init -backend=false
         terraform validate
+        terraform plan
       shell: bash

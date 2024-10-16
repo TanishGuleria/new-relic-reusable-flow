@@ -1,19 +1,17 @@
 name: 'Vault access'
 inputs:
   environment:
-    description: 'Environment to deploy the team-onboarding to'
     required: true
     type: string
   branch:
-    description: 'Branch to deploy the Service Terraform code from'
     required: true
     type: string
 
 runs:
   using: 'composite'
   steps:
-  
-    - name: Deploy to dev
+
+    - name: Deploy 
       run: |
-        echo "Deploying to dev environment inside actions"
+        echo "Deploying to ${{ inputs.environment }} environment inside actions"
       shell: bash

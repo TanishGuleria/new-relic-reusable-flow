@@ -13,8 +13,6 @@ runs:
 
     - name: Checkout Service Code
       uses: actions/checkout@v4.2.0
-      with:
-        token: ${{ secrets.TOKEN }}
       
     - name: Terraform Validate
       working-directory: terraform

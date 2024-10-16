@@ -43,7 +43,7 @@ jobs:
         uses: ./.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          popAccount: ${{inputs.branch }}
+          branch: ${{inputs.branch }}
       
 
   deploy-dev:
@@ -63,7 +63,7 @@ jobs:
         uses: ./reusable-workflows/.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          popAccount: ${{inputs.branch }}
+          branch: ${{inputs.branch }}
 
   deploy-qa:
     if: inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == false
@@ -82,7 +82,7 @@ jobs:
         uses: ./reusable-workflows/.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          popAccount: ${{inputs.branch }}
+          branch: ${{inputs.branch }}
 
   deploy-prod:
     environment: prod
@@ -102,7 +102,7 @@ jobs:
         uses: ./reusable-workflows/.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          popAccount: ${{inputs.branch }}
+          branch: ${{inputs.branch }}
   
   target_deploy:
     needs: setup
@@ -122,6 +122,6 @@ jobs:
         uses: ./reusable-workflows/.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          popAccount: ${{inputs.branch }}
+          branch: ${{inputs.branch }}
 
 

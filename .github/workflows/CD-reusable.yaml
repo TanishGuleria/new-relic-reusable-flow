@@ -31,15 +31,21 @@ jobs:
     if: inputs.environment == 'inf' || inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+
+      - name: Checkout reusable Workflows/Scripts
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deploy to inf
-        run: |
-          echo "Deploying to inf environment"
-          # Add your deployment script/commands here
+          repository: TanishGuleria/new-relic-reusable-flow
+          path: reusable-workflows
+          token: ${{ steps.create_token.outputs.token }}
+      
+      - name: Run Terrafrom CD
+        uses: ./reusable-workflows/.github/actions/terraform-deploy
+        with:
+          environment: ${{ inputs.ENVIRONMENT }}
+          popAccount: ${{inputs.branch }}
+      
+
   deploy-dev:
     if: inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == false
     runs-on: ubuntu-latest

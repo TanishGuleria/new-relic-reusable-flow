@@ -16,12 +16,21 @@ runs:
       with:
         path: service-repo
       
-    - name: Terraform Validate
+    - name: Terraform Init and Validate
       working-directory: service-repo/terraform
-      id: terraform-validate
+      id: terraform-init-validate
       run: |
-        ls
-        terraform init -backend=false
+        
+        terraform init -backend=true 
+          #-backend-config="bucket=my-bucket" \
+          #-backend-config="key=my-key" \
+          3-backend-config="region=my-region" \
+          #-backend-config="dynamodb_table=terraform-locks" \
+          #-backend-config="encrypt=true"
+        
+        # Validate the Terraform configuration
         terraform validate
-        terraform plan
+
+        # Generate a plan
+        terraform plan -out=plan.tfplan
       shell: bash

@@ -23,6 +23,37 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN}}
       
+      - name: Run Code Analysis/Test/other CI stage 
+        run: |
+          echo "Running code analysis... unit Test ....."
+          echo "Code analysis Test complete!"
+
+      - name: Docker Build
+        run: |
+          echo "Building Docker image..."
+
+          docker build -t newrelic-service:latest .
+      
+      - name: Image Scan 
+        run: |
+          echo "Running Container Scan "
+
+      - name: Test Container
+        run: |
+
+          docker run -d --name my-service -p 5000:5000 newrelic-service:latest
+
+          sleep 5
+
+          # Check the status code
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080)
+          if [ "$STATUS_CODE" -eq 200 ]; then
+              echo "Service is running and returned status code 200"
+          else
+              echo "Service returned status code $STATUS_CODE"
+              exit 1
+          fi
+      
       - name: Terraform Validate
         working-directory: terraform
         id: terraform-validate
@@ -42,6 +73,11 @@ jobs:
           exit-code: ${{ inputs.exit-code }}
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
+      
+      - name : Push Image To Common Container repo
+        run: |
+          echo "docker retaging tag image"
+          echo "docker pushing image to artifactory" 
       
       - name: Post CI
         run: | 

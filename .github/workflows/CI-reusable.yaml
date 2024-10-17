@@ -110,7 +110,7 @@ jobs:
               ref: '${{ github.ref }}', 
               inputs: {
                 environment: 'inf',
-                target_deploy: 'true',
+                target_deploy: 'no',
               }
             });
         

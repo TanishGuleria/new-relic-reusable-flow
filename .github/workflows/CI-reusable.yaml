@@ -33,15 +33,19 @@ jobs:
           echo "Code analysis Test complete!"
 
       - name: Docker Build
+        id: docker-build
         run: |
           echo "Building Docker image..."
           COMMIT_ID=$(git rev-parse HEAD)
           docker build -t ${{ inputs.app_name }}:${COMMIT_ID} .
+          echo "image_name=${{ inputs.app_name }}:${COMMIT_ID}" >> $GITHUB_OUTPUT
+
+
     
       - name: Run Docker vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: '${{ inputs.app_name }}:${COMMIT_ID}'
+          image-ref: ${{ steps.docker-build.outputs.image_name }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true

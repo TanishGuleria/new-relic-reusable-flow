@@ -44,7 +44,7 @@ jobs:
 
   deploy-inf:
     needs: setup
-    if: inputs.environment == 'inf' || inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == 'false'
+    if: inputs.environment == ('inf' || inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod') &&  inputs.target_deploy == 'false'
     runs-on: ubuntu-latest
     steps:
 
@@ -64,7 +64,7 @@ jobs:
       
 
   deploy-dev:
-    if: inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == 'false'
+    if: ( inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' )  &&  inputs.target_deploy == 'false'
     runs-on: ubuntu-latest
     needs: deploy-inf
     steps:
@@ -84,7 +84,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.dev_AWS_SECRET_ACCESS_KEY }}
 
   deploy-qa:
-    if: inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == 'false'
+    if: (inputs.environment == 'qa' || inputs.environment == 'prod') &&  inputs.target_deploy == 'false'
     runs-on: ubuntu-latest
     needs: deploy-dev
     steps:
@@ -105,7 +105,7 @@ jobs:
 
   deploy-prod:
     environment: prod
-    if: inputs.environment == 'prod' &&  inputs.target_deploy == 'false'
+    if: (inputs.environment == 'prod') &&  inputs.target_deploy == 'false'
     runs-on: ubuntu-latest
     needs: deploy-qa
     steps:

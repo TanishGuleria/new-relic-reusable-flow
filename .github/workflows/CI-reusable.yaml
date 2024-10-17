@@ -107,10 +107,10 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo, 
               workflow_id: 'CD.yml', 
-              ref: ${GITHUB_REF#refs/heads/}, 
+              ref: '${{ github.ref }}', 
               inputs: {
                 environment: 'inf',
-                target_deploy: false,
+                target_deploy: true,  // Send as a boolean
               }
             });
         

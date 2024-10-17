@@ -46,7 +46,7 @@ jobs:
           sleep 5
 
           # Check the status code
-          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080)
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:5000)
           if [ "$STATUS_CODE" -eq 200 ]; then
               echo "Service is running and returned status code 200"
           else

@@ -142,7 +142,17 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
-          aws-access-key-id: ${{ secrets[inputs.environment + '_AWS_ACCESS_KEY_ID'] }}
-          aws-secret-access-key: ${{ secrets[inputs.environment + '_AWS_SECRET_ACCESS_KEY'] }}
+          aws-access-key-id: ${{ 
+            inputs.environment == 'inf' && secrets.inf_AWS_ACCESS_KEY_ID ||
+            inputs.environment == 'dev' && secrets.dev_AWS_ACCESS_KEY_ID ||
+            inputs.environment == 'qa' && secrets.qa_AWS_ACCESS_KEY_ID ||
+            inputs.environment == 'prod' && secrets.prod_AWS_ACCESS_KEY_ID
+          }}
+          aws-secret-access-key: ${{ 
+            inputs.environment == 'inf' && secrets.inf_AWS_SECRET_ACCESS_KEY ||
+            inputs.environment == 'dev' && secrets.dev_AWS_SECRET_ACCESS_KEY ||
+            inputs.environment == 'qa' && secrets.qa_AWS_SECRET_ACCESS_KEY ||
+            inputs.environment == 'prod' && secrets.prod_AWS_SECRET_ACCESS_KEY
+          }}
 
 

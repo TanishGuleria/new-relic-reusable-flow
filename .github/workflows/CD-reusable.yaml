@@ -44,7 +44,7 @@ jobs:
 
   deploy-inf:
     needs: setup
-    if: inputs.environment == 'inf' || inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == 'false'
+    if: inputs.environment == 'inf' || inputs.environment == 'dev' || inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == false
     runs-on: ubuntu-latest
     steps:
 
@@ -127,7 +127,7 @@ jobs:
   target_deploy:
     needs: setup
     environment: ${{ inputs.environment }}
-    if: inputs.target_deploy == 'true' 
+    if: inputs.target_deploy == true
     runs-on: ubuntu-latest
     steps:
       

@@ -3,10 +3,14 @@ name: CI Terraform ReUsable Workflow
 on:
   workflow_call:
     inputs:
-      dummy_input:
-        description: "keeping this for later" 
+      app_name:
+        description: "name of the app name" 
         required: true
-        type: 'string'
+        type: string
+      container_port:
+        description: "Container port" 
+        required: true
+        type: number
     secrets:
       PAT_TOKEN:
         required: true
@@ -31,20 +35,18 @@ jobs:
       - name: Docker Build
         run: |
           echo "Building Docker image..."
-
-          docker build -t newrelic-service:latest .
-      
+          COMMIT_ID=$(git rev-parse HEAD)
+          docker build -t ${{ inputs.app_name }}:${COMMIT_ID} .
+    
       - name: Image Scan 
         run: |
-          echo "Running Container Scan "
+          echo "Running Container Scan"
 
       - name: Test Container
         run: |
-
-          docker run -d --name my-service -p 5000:5000 newrelic-service:latest
-
+          COMMIT_ID=$(git rev-parse HEAD)
+          docker run -d --name my-service -p 5000:${{ inputs.container_port }} ${{ inputs.app_name }}:${COMMIT_ID}
           sleep 5
-
           # Check the status code
           STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:5000)
           if [ "$STATUS_CODE" -eq 200 ]; then
@@ -76,8 +78,21 @@ jobs:
       
       - name : Push Image To Common Container repo
         run: |
+          COMMIT_ID=$(git rev-parse HEAD)
           echo "docker retaging tag image"
-          echo "docker pushing image to artifactory" 
+          echo "docker pushing image to artifactory.tanish-guleria.com/${{ inputs.app_name }}:${COMMIT_ID}" 
+      
+      - name: Generate Artifact File
+        run: |
+          echo "This is a generated file." > image_artifact.txt
+          echo "Commit ID: $(git rev-parse HEAD)" >> image_artifact.txt
+          echo "File created: image_artifact.txt"
+
+      - name: Store Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-file
+          path: image_artifact.txt
       
       - name: Post CI
         run: | 

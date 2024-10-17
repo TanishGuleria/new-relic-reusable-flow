@@ -17,6 +17,22 @@ on:
     secrets:
       PAT_TOKEN:
         required: true
+      inf_AWS_ACCESS_KEY_ID:
+        required: true
+      inf_AWS_SECRET_ACCESS_KEY:
+        required: false
+      dev_AWS_ACCESS_KEY_ID:
+        required: true
+      dev_AWS_SECRET_ACCESS_KEY:
+        required: true
+      qa_AWS_ACCESS_KEY_ID:
+        required: false
+      qa_AWS_SECRET_ACCESS_KEY:
+        required: true
+      prod_AWS_ACCESS_KEY_ID:
+        required: true
+      prod_AWS_SECRET_ACCESS_KEY:
+        required: true
 
 jobs:
   setup:
@@ -43,6 +59,8 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
+          aws-access-key-id: ${{ secrets.inf_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.inf_AWS_SECRET_ACCESS_KEY }}
       
 
   deploy-dev:
@@ -62,6 +80,8 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
+          aws-access-key-id: ${{ secrets.dev_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.dev_AWS_SECRET_ACCESS_KEY }}
 
   deploy-qa:
     if: inputs.environment == 'qa' || inputs.environment == 'prod' &&  inputs.target_deploy == false
@@ -80,6 +100,8 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
+          aws-access-key-id: ${{ secrets.qa_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.qa_AWS_SECRET_ACCESS_KEY }}
 
   deploy-prod:
     environment: prod
@@ -99,6 +121,8 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
+          aws-access-key-id: ${{ secrets.prod_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.prod_AWS_SECRET_ACCESS_KEY }}
   
   target_deploy:
     needs: setup
@@ -118,5 +142,7 @@ jobs:
         with:
           environment: ${{ inputs.ENVIRONMENT }}
           branch: ${{inputs.branch }}
+          aws-access-key-id: ${{ secrets[inputs.environment + '_AWS_ACCESS_KEY_ID'] }}
+          aws-secret-access-key: ${{ secrets[inputs.environment + '_AWS_SECRET_ACCESS_KEY'] }}
 
 

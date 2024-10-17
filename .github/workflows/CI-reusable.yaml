@@ -106,7 +106,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo, 
-              workflow_id: 'CD.yml', 
+              workflow_id: 'CD.yaml', 
               ref: '${{ github.ref }}', 
               inputs: {
                 environment: 'inf',

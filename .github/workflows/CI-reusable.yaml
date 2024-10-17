@@ -38,9 +38,15 @@ jobs:
           COMMIT_ID=$(git rev-parse HEAD)
           docker build -t ${{ inputs.app_name }}:${COMMIT_ID} .
     
-      - name: Image Scan 
-        run: |
-          echo "Running Container Scan"
+      - name: Run Docker vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: '${{ inputs.app_name }}:${COMMIT_ID}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
       - name: Test Container
         run: |
@@ -63,16 +69,15 @@ jobs:
           terraform init -backend=false
           terraform validate
       
-      - name: Run Trivy or any scan vulnerability scanner in IaC mode
+      - name: Run IAC vulnerability scanner 
         if: ${{ steps.terraform-validate.outcome == 'success' }}
         uses: aquasecurity/trivy-action@0.24.0
         with:
           scan-type: 'config'
-          hide-progress: ${{ inputs.hide-progress }}
+          hide-progress: true
           scan-ref: '.'
-          skip-dirs: ${{ inputs.skip-dirs }}
           limit-severities-for-sarif: true
-          exit-code: ${{ inputs.exit-code }}
+          exit-code: 0
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
       

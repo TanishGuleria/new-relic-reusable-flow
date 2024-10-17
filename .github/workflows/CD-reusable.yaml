@@ -137,22 +137,13 @@ jobs:
           repository: TanishGuleria/new-relic-reusable-flow
           token: ${{ secrets.PAT_TOKEN }}
       
-      - name: Run Terrafrom CD
+      - name: Run Terraform CD
         uses: ./.github/actions/terraform-deploy
         with:
           environment: ${{ inputs.ENVIRONMENT }}
-          branch: ${{inputs.branch }}
-          aws-access-key-id: ${{ 
-            inputs.environment == 'inf' && secrets.inf_AWS_ACCESS_KEY_ID ||
-            inputs.environment == 'dev' && secrets.dev_AWS_ACCESS_KEY_ID ||
-            inputs.environment == 'qa' && secrets.qa_AWS_ACCESS_KEY_ID ||
-            inputs.environment == 'prod' && secrets.prod_AWS_ACCESS_KEY_ID
-          }}
-          aws-secret-access-key: ${{ 
-            inputs.environment == 'inf' && secrets.inf_AWS_SECRET_ACCESS_KEY ||
-            inputs.environment == 'dev' && secrets.dev_AWS_SECRET_ACCESS_KEY ||
-            inputs.environment == 'qa' && secrets.qa_AWS_SECRET_ACCESS_KEY ||
-            inputs.environment == 'prod' && secrets.prod_AWS_SECRET_ACCESS_KEY
-          }}
+          branch: ${{ inputs.branch }}
+          aws-access-key-id: ${{ secrets[format('{0}_AWS_ACCESS_KEY_ID', inputs.ENVIRONMENT)] }}
+          aws-secret-access-key: ${{ secrets[format('{0}_AWS_SECRET_ACCESS_KEY', inputs.ENVIRONMENT)] }}
+
 
 

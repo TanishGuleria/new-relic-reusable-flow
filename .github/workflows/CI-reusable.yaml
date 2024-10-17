@@ -97,7 +97,23 @@ jobs:
       - name: Post CI
         run: | 
           echo "CI Completed"
-       
+      
+      - name: Trigger CD 
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo, 
+              workflow_id: 'CD.yml', 
+              ref: ${GITHUB_REF#refs/heads/}, 
+              inputs: {
+                environment: 'inf',
+                target_deploy: false,
+              }
+            });
+        
 
 
       

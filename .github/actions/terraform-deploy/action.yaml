@@ -46,5 +46,5 @@ runs:
         terraform validate
 
         # Generate a plan
-        terraform plan -out=plan.tfplan -lock=false
+        terraform plan -out=plan.tfplan -lock=false -var="image_tag=${{ github.ref_name }} "
       shell: bash
